@@ -1,0 +1,14 @@
+[
+  "facts",
+  {
+    "key1": "Hello",
+    "key2": ["Hi", ["anotherArray"], null, "Hi", { "test": "nested" }],
+    "key3": {
+      "name": "Denis",
+      "friends": {
+        "hi": "there",
+        "phonebook": [1, 2, "3"]
+      }
+    }
+  }
+]
