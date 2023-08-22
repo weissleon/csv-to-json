@@ -35,7 +35,6 @@ const run = async () => {
       const aoa = convertJsonToCsv(jsonData);
 
       const wb = excelHandler.create();
-      console.log(wb.worksheets);
       const ws = wb.worksheets[0];
 
       const columnRow = ["key", "value"];
@@ -58,7 +57,19 @@ const run = async () => {
       const ws = wb.worksheets[0];
       const rows = ws
         .getRows(2, ws.rowCount - 1)
-        .map((row) => row.values.slice(1))
+        .map((row) => {
+          const test = row.values.slice(1).map((cell) => {
+            let finalCell = cell;
+            if (typeof finalCell === "object") {
+              if (finalCell["richText"] !== undefined)
+                finalCell["richText"].length > 1
+                  ? (finalCell = finalCell["richText"][1]["text"])
+                  : (finalCell = finalCell["richText"][0]["text"]);
+            }
+            return finalCell;
+          });
+          return test;
+        })
         .filter((row) => row.length !== 0);
 
       const jsonData = convertCsvToJson(rows);
@@ -74,42 +85,6 @@ const run = async () => {
 
 // * CONSTANTS
 const PATH_OUT_DIR = "out";
-
-// function processObject(object) {
-//   const procData = [];
-//   for (const key in object) {
-//     switch (checkDataType(object[key])) {
-//       case "value":
-//         procData.push([key, object[key].toString()]);
-
-//         break;
-//       case "array":
-//         for (const value of object[key]) {
-//           if (isObject(value)) {
-//           } else {
-//             procData.push([key, value.toString()]);
-//           }
-//         }
-
-//         break;
-//       case "object":
-//         const data = processObject(object[key]);
-
-//         for (const datum of data) {
-//           const finalKey = `${key}/${datum[0]}`;
-//           const value = datum[1];
-
-//           procData.push([finalKey, value]);
-//         }
-
-//         break;
-//       default:
-//         break;
-//     }
-//   }
-
-//   return procData;
-// }
 
 function getFileName(filePath) {
   const path = require("path");
@@ -202,41 +177,5 @@ async function jsonToXlsx(filePath) {
   const outputPath = generateOutputPath(filePath);
   await workbook.xlsx.writeFile(outputPath);
 }
-
-async function xlsxToJson(filePath) {}
-
-// async function run() {
-//   const prompts = require("prompts");
-
-//   const response = await prompts([
-//     {
-//       name: "task",
-//       type: "select",
-//       choices: ["JSON to xlsx", "xlsx to JSON"],
-//       message: "Which task would you like to perform?",
-//     },
-//     {
-//       name: "filePath",
-//       type: "text",
-//       message: "Please specify the file path:",
-//     },
-//   ]);
-
-//   const task = response["task"];
-//   const filePath = response["filePath"];
-
-//   switch (task) {
-//     case 0:
-//       await jsonToXlsx(filePath);
-//       break;
-
-//     case 1:
-//       await xlsxToJson(filePath);
-//       break;
-
-//     default:
-//       break;
-//   }
-// }
 
 run();

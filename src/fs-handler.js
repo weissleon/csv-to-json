@@ -36,9 +36,17 @@ const readYamlFile = (path) => {
 
 const readJsonFile = (path) => {
   const rawStringData = fs.readFileSync(path, { encoding: "utf-8" });
-  const jsonData = JSON.parse(rawStringData);
+  const jsonData = JSON.parse(stripBOM(rawStringData));
 
   return jsonData;
+};
+
+const stripBOM = (content) => {
+  content = content.toString();
+  if (content.charCodeAt(0) === 0xfeff) {
+    content = content.slice(1);
+  }
+  return content;
 };
 
 const writeJsonFile = (jsonData, fileNameWithoutExtension) => {

@@ -48,50 +48,10 @@ function convertJsonToCsv(jsonData, keyPath = []) {
     throw new Error("Invalid Data Type!");
   }
 
-  //   for (const key in jsonData) {
-  //     const value = jsonData[key];
-  //     switch (checkDataType(value)) {
-  //       case "value":
-  //         csvKVList.push([key, value.toString()]);
-  //         break;
-  //       case "array":
-  //         const array = value;
-  //         for (const element of array) {
-  //           if (isObject(element)) {
-  //             const data = convertJsonToCsv(jsonData[key]);
-  //             for (const datum of data) {
-  //               const finalKey = `${key}/${datum[0]}`;
-  //               const value = datum[1];
-  //               csvKVList.push([finalKey, value]);
-  //             }
-  //           } else if (isArray(element)) {
-  //             csvKVList.push([key, element.toString()]);
-  //           } else {
-  //             csvKVList.push([key, element.toString()]);
-  //           }
-  //         }
-
-  //         break;
-  //       case "object":
-  //         const data = convertJsonToCsv(jsonData[key]);
-
-  //         for (const datum of data) {
-  //           const finalKey = `${key}/${datum[0]}`;
-  //           const value = datum[1];
-
-  //           csvKVList.push([finalKey, value]);
-  //         }
-
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //   }
-
   return csvKVList;
 }
 
-function convertCsvToJson(csvData, remainingKey) {
+function convertCsvToJson(csvData) {
   let jsonData = null;
 
   for (let i = 0; i < csvData.length; i++) {
